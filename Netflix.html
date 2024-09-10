@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix-like Homepage with OMDb API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycFno-vQWK73m0l_C-ZbjDobC4UnRqc8GxRMZS1hUC8ZO6Uehjf15Ux7dA5OMzjUr0LY&usqp=CAU');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5em;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 100px auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-align: center;
+            color: #ff0;
+        }
+
+        .movies {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .movie-card {
+            width: 18%;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.1);
+        }
+
+        .movie-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .movie-title {
+            text-align: center;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        Netflix
+    </header>
+
+    <div class="container">
+        <h2>Movies</h2>
+        <div class="movies" id="movies">
+           
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Netflix-like Clone
+    </footer>
+
+    <script>
+        const API_KEY = 'ff70a512'; 
+        const API_URL = 'http://www.omdbapi.com/?s='; 
+
+        const moviesContainer = document.getElementById('movies');
+
+        async function fetchMovies(movieTitle = 'Batman') {
+            try {
+                const response = await fetch(API_URL + encodeURIComponent(movieTitle) + '&apikey=' + API_KEY);
+                const data = await response.json();
+                const movies = data.Search;
+                displayMovies(movies);
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        }
+
+        function displayMovies(movies) {
+            moviesContainer.innerHTML = '';
+            movies.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie-card');
+
+                movieElement.innerHTML = `
+                    <img src="${movie.Poster}" alt="${movie.Title}">
+                    <div class="movie-title">${movie.Title}</div>
+                `;
+
+                moviesContainer.appendChild(movieElement);
+            });
+        }
+
+        
+        fetchMovies();
+    </script>
+    
+</body>
+</html>
